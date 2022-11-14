@@ -2,13 +2,25 @@
 
 namespace App\Entity;
 
-use App\Repository\PropertyRepository;
+use DateTime;
+use DateTimeImmutable;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\PropertyRepository;
 
 #[ORM\Entity(repositoryClass: PropertyRepository::class)]
 class Property
 {
+    const HEAT = [
+        0 => 'electrique',
+        1 => 'gaz'
+    ];
+
+    public function __construct()
+    {
+        $this->created_at = new DateTimeImmutable();
+    }
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
@@ -45,7 +57,7 @@ class Property
     private ?string $postal_code = null;
 
     #[ORM\Column(type: Types::BOOLEAN, nullable: false)]
-    private ?bool $sold = null;
+    private ?bool $sold;
 
     #[ORM\Column]
     private ?\DateTimeImmutable $created_at = null;
@@ -126,7 +138,11 @@ class Property
 
         return $this;
     }
-
+    //Methode pour formater le prix
+    public function getFormattedPrice(): string
+    {
+        return number_format($this->price, 0, '', ' ');
+    }
     public function getHeat(): ?int
     {
         return $this->heat;
@@ -187,6 +203,7 @@ class Property
         return $this;
     }
 
+    // initialisé dans le constructeur 
     public function getCreatedAt(): ?\DateTimeImmutable
     {
         return $this->created_at;

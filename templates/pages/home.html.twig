@@ -8,5 +8,22 @@
         <h1 class="mt-4">Agence Lorem Ipsum</h1>
         <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Culpa modi alias sunt, facere mollitia fugit voluptatibus, voluptatum quasi excepturi porro aperiam blanditiis ullam, earum perferendis ad cum quisquam voluptatem dignissimos.</p>
     </div>
+
+    <div class="container">
+        <h2>Les derniers biens</h2>
+        <div class="row flex">
+            {% for property in properties %}
+            <div class="col-6 mt-3">
+                <div class="card">
+                    <h5 class="card-title">
+                        <a href="">{{ property.title }}</a>
+                    </h5>
+                    <p class="card-text">{{ property.postalCode }} {{ property.city }} </p>
+                    <div class="text-primary" style="font-weight: bold; font-size:1.8rem">{{ property.formattedPrice}} €</div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
 </div>
 {% endblock %}
