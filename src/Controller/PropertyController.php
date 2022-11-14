@@ -6,11 +6,13 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-class HomeController extends AbstractController
+class PropertyController extends AbstractController
 {
-    #[Route('/', name: 'home')]
+    #[Route('/acheter', name: 'property.index')]
     public function index(): Response
     {
-        return $this->render('pages/home.html.twig');
+        return $this->render('property/index.html.twig', [
+            'current_menu' => 'properties',
+        ]);
     }
 }
