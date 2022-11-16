@@ -2,18 +2,19 @@
 
 namespace App\Entity;
 
-use DateTime;
+
 use DateTimeImmutable;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\PropertyRepository;
+use Cocur\Slugify\Slugify;
 
 #[ORM\Entity(repositoryClass: PropertyRepository::class)]
 class Property
 {
     const HEAT = [
-        0 => 'electrique',
-        1 => 'gaz'
+        0 => 'Electrique',
+        1 => 'Gaz'
     ];
 
     public function __construct()
@@ -56,8 +57,8 @@ class Property
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $postal_code = null;
 
-    #[ORM\Column(type: Types::BOOLEAN, nullable: false)]
-    private ?bool $sold;
+    #[ORM\Column(type: Types::BOOLEAN, nullable: true)]
+    private ?bool $sold = null;
 
     #[ORM\Column]
     private ?\DateTimeImmutable $created_at = null;
@@ -77,6 +78,11 @@ class Property
         $this->title = $title;
 
         return $this;
+    }
+
+    public function getSlug(): ?string
+    {
+        return (new Slugify())->slugify($this->title);
     }
 
     public function getDescription(): ?string
@@ -153,6 +159,11 @@ class Property
         $this->heat = $heat;
 
         return $this;
+    }
+
+    public function getHeatType(): string
+    {
+        return self::HEAT[$this->heat];
     }
 
     public function getCity(): ?string

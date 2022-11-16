@@ -16,7 +16,7 @@
             <div class="col-6 mt-3">
                 <div class="card">
                     <h5 class="card-title">
-                        <a href="">{{ property.title }}</a>
+                        <a href="{{ path('property.show', {id: property.id , slug: property.slug })}}">{{ property.title }}</a>
                     </h5>
                     <p class="card-text">{{ property.postalCode }} {{ property.city }} </p>
                     <div class="text-primary" style="font-weight: bold; font-size:1.8rem">{{ property.formattedPrice}} €</div>
