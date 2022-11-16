@@ -8,8 +8,12 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\PropertyRepository;
 use Cocur\Slugify\Slugify;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+
 
 #[ORM\Entity(repositoryClass: PropertyRepository::class)]
+#[UniqueEntity('title', message: 'Ce titre existe déjà.')]
 class Property
 {
     const HEAT = [
@@ -28,12 +32,33 @@ class Property
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\Regex(
+        pattern: '/^[a-zA-Z]+$/i',
+        message: "Le titre contient des caractères non acceptable."
+    )]
+    #[Assert\Length(
+        min: 8,
+        max: 25,
+        minMessage: 'Le nombre de caractères minimum est de : {{ limit }}',
+        maxMessage: 'Le nombre de caractères maximum est de : {{ limit }}',
+    )]
     private ?string $title = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
+    #[Assert\Length(
+        min: 20,
+        max: 1000,
+        minMessage: 'Le nombre de caractères minimum est de : {{ limit }}',
+        maxMessage: 'Le nombre de caractères maximum est de : {{ limit }}',
+    )]
     private ?string $description = null;
 
     #[ORM\Column]
+    #[Assert\Range(
+        min: 10,
+        max: 400,
+        notInRangeMessage: "La surface doit être comprise entre {{min}}m2 et {{max}} m2."
+    )]
     private ?int $surface = null;
 
     #[ORM\Column]
@@ -43,6 +68,10 @@ class Property
     private ?int $bedrooms = null;
 
     #[ORM\Column]
+    #[Assert\Regex(
+        pattern: '/^[0-9]+$/i',
+        message: "Le prix n'est pas correct"
+    )]
     private ?int $price = null;
 
     #[ORM\Column(nullable: true)]
@@ -55,6 +84,10 @@ class Property
     private ?string $adress = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Assert\Regex(
+        pattern: '/^[0-9]{5}+$/i',
+        message: "Le code postal contient des caractères non acceptable."
+    )]
     private ?string $postal_code = null;
 
     #[ORM\Column(type: Types::BOOLEAN, nullable: true)]

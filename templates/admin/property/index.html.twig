@@ -5,14 +5,17 @@
 
 {% block body %}
 	<div class="container mt-4">
-		<h1>Gerer les biens</h1>
+		<h1 class="text-center">Gérer les biens</h1>
 		<div class="text-end">
-			<a href="{{path('admin.property.new')}}" class="btn btn-primary">Créer un nouveau bien</a>
+			<a href="{{path('admin.property.new')}}" class="btn btn-primary m-3">Créer un nouveau bien</a>
 		</div>
-		<table class="table table-striped">
+		<table class="table table-striped text-center">
 			<thead>
 				<tr>
 					<th>Titres</th>
+					<th>Prix</th>
+					<th>Surface</th>
+					<th>Nombre de pièces</th>
 					<th>Actions</th>
 				</tr>
 			</thead>
@@ -20,8 +23,13 @@
 				{% for property in properties %}
 					<tr>
 						<td>{{ property.title }}</td>
+						<td>{{property.formattedPrice }}€</td>
+						<td>{{property.rooms}}
+							pièces</td>
+						<td>{{property.surface}}
+							m2</td>
 						<td>
-							<a href="{{ path('admin.property.edit', {id: property.id}) }}" class="btn btn-info">Modifier</a>
+							<a href="{{ path('admin.property.edit', {id: property.id}) }}" class="btn btn-success">Modifier</a>
 							<form action="{{ path('admin.property.delete', {id: property.id}) }}" method="post" style="display:inline-block" onsubmit="return confirm('Etes-vous sûr de vouloir supprimer ce bien ?');">
 								<input type="hidden" name="_method" value="DELETE">
 								<input type="hidden" name="token" value="{{csrf_token('delete' ~ property.id)}}">

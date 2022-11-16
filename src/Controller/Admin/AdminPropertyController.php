@@ -51,6 +51,8 @@ class AdminPropertyController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->persist($property);
             $entityManager->flush();
+            $this->addFlash('success', 'Bien créer avec succès ! ');
+
 
             return $this->redirectToRoute('admin.property.index');
         }
@@ -71,6 +73,7 @@ class AdminPropertyController extends AbstractController
         // verification des données et flush en bdd
         if ($form->isSubmitted() && $form->isValid()) {
             $this->em->getManager()->flush();
+            $this->addFlash('success', 'Bien modifié avec succès ! ');
             return $this->redirectToRoute('admin.property.index');
         }
 
