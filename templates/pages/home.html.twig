@@ -15,7 +15,7 @@
             {% for property in properties %}
             <div class="col-6 mt-3">
                 <div class="card">
-                    <h5 class="card-title">
+                    <h5 class="card-title text-center mt-2">
                         <a href="{{ path('property.show', {id: property.id , slug: property.slug })}}">{{ property.title }}</a>
                     </h5>
                     <p class="card-text">{{ property.postalCode }} {{ property.city }} </p>
