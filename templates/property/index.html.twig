@@ -3,26 +3,18 @@
 {% block title %}Tous nos biens{% endblock %}
 
 {% block body %}
-<div class="container">
-    <div class="jumbontron text-center">
-        <h1 class="mt-4">Voir tous nos biens</h1>
-        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Culpa modi alias sunt, facere mollitia fugit voluptatibus, voluptatum quasi excepturi porro aperiam blanditiis ullam, earum perferendis ad cum quisquam voluptatem dignissimos.</p>
-    </div>
-    <div class="container">
-        <h2>Les derniers biens</h2>
-        <div class="row flex">
-            {% for property in properties %}
-            <div class="col-6 mt-3">
-                <div class="card">
-                    <h5 class="card-title text-center mt-2">
-                        <a href="{{ path('property.show', {id: property.id , slug: property.slug })}}">{{ property.title }}</a>
-                    </h5>
-                    <p class="card-text">{{ property.postalCode }} {{ property.city }} </p>
-                    <div class="text-primary" style="font-weight: bold; font-size:1.8rem">{{ property.formattedPrice}} €</div>
-                </div>
-            </div>
-            {% endfor %}
+<div class="container mt-4">
+    <h1>Voir tous nos biens</h1>
+    <div class="row">
+        {% for property in properties %}
+        <div class="col-md-4">
+            {% include 'property/_property.html.twig' %}
         </div>
+        {% endfor %}
+    </div>
+
+    <div class="pagination">
+        {{ knp_pagination_render(properties) }}
     </div>
 </div>
 

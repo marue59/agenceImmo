@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use Doctrine\ORM\Query;
 use App\Entity\Property;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
@@ -42,14 +43,13 @@ class PropertyRepository extends ServiceEntityRepository
 
 
     /**
-     * @return Property []
+     * @return Query []
      * Trouver les biens qui ne sont pas encore vendus
      */
-    public function findAllVisible(): array
+    public function findAllVisibleQuery(): Query
     {
         return $this->findVisibleQuery()
-            ->getQuery()
-            ->getResult();
+            ->getQuery();
     }
 
     /**
