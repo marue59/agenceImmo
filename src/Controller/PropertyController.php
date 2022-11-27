@@ -25,11 +25,12 @@ class PropertyController extends AbstractController
     }
 
     #[Route('/biens', name: 'property.index')]
-    public function index(): Response
+    public function index(PropertyRepository $propertyRepository): Response
     {
-
+        $properties = $propertyRepository->findLatest();
         return $this->render('property/index.html.twig', [
             'current_menu' => 'properties',
+            'properties' => $properties
         ]);
     }
 
