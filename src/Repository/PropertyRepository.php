@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use Doctrine\ORM\Query;
 use App\Entity\Property;
+use App\Entity\PropertySearch;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
@@ -44,17 +45,29 @@ class PropertyRepository extends ServiceEntityRepository
 
     /**
      * @return Query []
-     * Trouver les biens qui ne sont pas encore vendus
+     * Parametre pour la searchbar
      */
-    public function findAllVisibleQuery(): Query
+    public function findAllVisibleQuery(PropertySearch $search): Query
     {
-        return $this->findVisibleQuery()
-            ->getQuery();
+        $query = $this->findVisibleQuery();
+
+        if ($search->getMaxPrice()) {
+            $query = $query
+                ->andWhere('p.price <= :maxprice')
+                ->setParameter('maxprice', $search->getMaxPrice());
+        }
+
+        if ($search->getMinSurface()) {
+            $query = $query
+                ->andWhere('p.surface >= :minsurface')
+                ->setParameter('minsurface', $search->getMinSurface());
+        }
+        return $query->getQuery();
     }
 
     /**
      * @return Property []
-     * Trouver les biens qui ne sont pas encore vendus
+     * Trouver les 10 derniers biens qui ne sont pas encore vendus
      */
     public function findLatest(): array
     {

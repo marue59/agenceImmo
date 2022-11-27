@@ -3,6 +3,28 @@
 {% block title %}Tous nos biens{% endblock %}
 
 {% block body %}
+<div class="jumbotron">
+    <div class="container mt-4">
+        {{ form_start(form) }}
+        <div class="form-row">
+            <div class="d-flex">
+                <div class="col m-2">
+                    {{ form_row(form.minSurface )}}
+                </div>
+                <div class="col m-2">
+                    {{ form_row(form.maxPrice )}}
+                </div>
+                <div class="col m-2">
+                    <button class="btn btn-primary">
+                        Rechercher
+                    </button>
+                </div>
+            </div>
+
+        </div>
+        {{ form_end(form) }}
+    </div>
+</div>
 <div class="container mt-4">
     <h1>Voir tous nos biens</h1>
     <div class="row">
