@@ -2,7 +2,9 @@
 
 namespace App\Repository;
 
+use Doctrine\ORM\Query;
 use App\Entity\Property;
+use App\Entity\PropertySearch;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
@@ -42,19 +44,52 @@ class PropertyRepository extends ServiceEntityRepository
 
 
     /**
-     * @return Property []
-     * Trouver les biens qui ne sont pas encore vendus
+     * @return Query []
+     * Parametre pour la searchbar
      */
-    public function findAllVisible(): array
+    public function findAllVisibleQuery(PropertySearch $search): Query
     {
-        return $this->findVisibleQuery()
-            ->getQuery()
-            ->getResult();
+        $query = $this->findVisibleQuery();
+
+        if ($search->getMaxPrice()) {
+            $query = $query
+                ->andWhere('p.price <= :maxprice')
+                ->setParameter('maxprice', $search->getMaxPrice());
+        }
+
+        if ($search->getMinPrice()) {
+            $query = $query
+                ->andWhere('p.price >= :minprice')
+                ->setParameter('minprice', $search->getMinPrice());
+        }
+
+        if ($search->getMinSurface()) {
+            $query = $query
+                ->andWhere('p.surface >= :minsurface')
+                ->setParameter('minsurface', $search->getMinSurface());
+        }
+
+        if ($search->getMaxSurface()) {
+            $query = $query
+                ->andWhere('p.surface <= :maxsurface')
+                ->setParameter('maxsurface', $search->getMaxSurface());
+        }
+
+        if ($search->getOptions()->count() > 0) {
+            $k = 0;
+            foreach ($search->getOptions() as $option) {
+                $k++;
+                $query = $query
+                    ->andWhere(":option$k MEMBER OF p.options")
+                    ->setParameter("option$k", $option);
+            }
+        }
+        return $query->getQuery();
     }
 
     /**
      * @return Property []
-     * Trouver les biens qui ne sont pas encore vendus
+     * Trouver les 10 derniers biens qui ne sont pas encore vendus
      */
     public function findLatest(): array
     {

@@ -23,6 +23,9 @@
 <div class="row">
     <div class="col-md-6">{{ form_row(form.created_at) }}</div>
 </div>
-{{ form_widget(form)}}
+<div class="row">
+    <div class="col-md-6">{{ form_row(form.options)}}</div>
+
+</div>
 <button class="btn btn-primary">{{ button|default('Enregistrer') }}</button>
 {{ form_end (form)}}

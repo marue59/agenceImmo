@@ -3,11 +3,14 @@
 namespace App\Entity;
 
 
+use App\Entity\Option;
 use DateTimeImmutable;
+use Cocur\Slugify\Slugify;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\PropertyRepository;
-use Cocur\Slugify\Slugify;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
@@ -24,6 +27,7 @@ class Property
     public function __construct()
     {
         $this->created_at = new DateTimeImmutable();
+        $this->options = new ArrayCollection();
     }
 
     #[ORM\Id]
@@ -32,10 +36,6 @@ class Property
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    #[Assert\Regex(
-        pattern: '/^[a-zA-Z]+$/i',
-        message: "Le titre contient des caractères non acceptable."
-    )]
     #[Assert\Length(
         min: 8,
         max: 25,
@@ -85,7 +85,7 @@ class Property
 
     #[ORM\Column(length: 255, nullable: true)]
     #[Assert\Regex(
-        pattern: '/^[0-9]{5}+$/i',
+        pattern: "/^[0-9]{5}+$/i",
         message: "Le code postal contient des caractères non acceptable."
     )]
     private ?string $postal_code = null;
@@ -95,6 +95,10 @@ class Property
 
     #[ORM\Column]
     private ?\DateTimeImmutable $created_at = null;
+
+    #[ORM\ManyToMany(targetEntity: Option::class, inversedBy: 'properties')]
+    private Collection $options;
+
 
     public function getId(): ?int
     {
@@ -256,6 +260,30 @@ class Property
     public function setCreatedAt(\DateTimeImmutable $created_at): self
     {
         $this->created_at = $created_at;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Option>
+     */
+    public function getOptions(): Collection
+    {
+        return $this->options;
+    }
+
+    public function addOption(Option $option): self
+    {
+        if (!$this->options->contains($option)) {
+            $this->options->add($option);
+        }
+
+        return $this;
+    }
+
+    public function removeOption(Option $option): self
+    {
+        $this->options->removeElement($option);
 
         return $this;
     }
