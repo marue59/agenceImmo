@@ -57,10 +57,32 @@ class PropertyRepository extends ServiceEntityRepository
                 ->setParameter('maxprice', $search->getMaxPrice());
         }
 
+        if ($search->getMinPrice()) {
+            $query = $query
+                ->andWhere('p.price >= :minprice')
+                ->setParameter('minprice', $search->getMinPrice());
+        }
+
         if ($search->getMinSurface()) {
             $query = $query
                 ->andWhere('p.surface >= :minsurface')
                 ->setParameter('minsurface', $search->getMinSurface());
+        }
+
+        if ($search->getMaxSurface()) {
+            $query = $query
+                ->andWhere('p.surface <= :maxsurface')
+                ->setParameter('maxsurface', $search->getMaxSurface());
+        }
+
+        if ($search->getOptions()->count() > 0) {
+            $k = 0;
+            foreach ($search->getOptions() as $option) {
+                $k++;
+                $query = $query
+                    ->andWhere(":option$k MEMBER OF p.options")
+                    ->setParameter("option$k", $option);
+            }
         }
         return $query->getQuery();
     }

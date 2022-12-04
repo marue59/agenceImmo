@@ -6,21 +6,29 @@
 <div class="jumbotron">
     <div class="container mt-4">
         {{ form_start(form) }}
-        <div class="form-row">
-            <div class="d-flex">
-                <div class="col m-2">
-                    {{ form_row(form.minSurface )}}
-                </div>
-                <div class="col m-2">
-                    {{ form_row(form.maxPrice )}}
-                </div>
-                <div class="col m-2">
+        <div class="row">
+            <div class="col-3">
+                {{ form_row(form.minSurface )}}
+            </div>
+            <div class="col-3">
+                {{ form_row(form.maxSurface )}}
+            </div>
+            <div class="col-3">
+                {{ form_row(form.minPrice )}}
+            </div>
+            <div class="col-3 ">
+                {{ form_row(form.maxPrice )}}
+            </div>
+            <div class="col-8">
+                {{ form_row(form.options )}}
+            </div>
+            <div class="col-4 text-end">
+                <div class="form-group">
                     <button class="btn btn-primary">
                         Rechercher
                     </button>
                 </div>
             </div>
-
         </div>
         {{ form_end(form) }}
     </div>
